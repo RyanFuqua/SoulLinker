@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark">
+    <div class="vh-100 d-flex align-items-center justify-content-center flex-wrap col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" id="divContent">
+        <div class="card col-12" id="divTable">
+            <div class="card-body">
+                <h1>First</h1>
+                <select id="pokeSearch" class="form-control">
+                    <option></option>
+                </select>
+                <table class="table table-striped" id="tblPokemon">
+                    <thead>
+                        <tr><th>Name</th><th>Type</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button class="btn btn-primary col-12" type="button" id="btnFill">Fill</button>
+            </div>
+        </div>
+    </div>   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            populateSearch()
+        })
+
+        $('#btnFill').on('click', function(){
+            $('#pokeSearch').selectize({
+            sortField: 'text'
+            })
+        })
+
+        function populateSearch(){
+            $.getJSON('https://pokeapi.co/api/v2/pokemon?limit=1302',function(pokedex){
+                console.log(pokedex)
+                pokedex.results.forEach(function(pokemon){
+                    let strSelect = '<option id="' + pokemon['name'] + '" value="' + pokemon['name'] + '">' + pokemon['name'] + '</option>'
+                    $('#pokeSearch').append(strSelect)
+                })
+            })
+        }
+    </script>
